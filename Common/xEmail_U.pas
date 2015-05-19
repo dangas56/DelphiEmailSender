@@ -4,38 +4,44 @@ interface
 uses system.classes, xEmail_I;
 
 type
-  TEmail = class (TInterfacedObject, IEmail, IEmailSendTo)
+  TEmail = class (TInterfacedObject, IEmail, IEmailSendTo, IEmailSubject)
   strict private
-    slSendTo             : TStringList;
+    slSendTo            : TStringList;
     sSubject            : String;
     sBodyPlainText      : String;
   private
     procedure SetBodyPlainText(const Value: String);
+    function GetSubject : String;
     procedure SetSubject(const Value: String);
-  public
-    procedure AddSendToEmailAddress(SendTo : String);
     function getSendTo : TStringList;
+  public
+    procedure AddSendToEmailAddress(const SendTo : String);
     property SendTo : TStringList read slSendTo ;
-    property Subject : String read sSubject write SetSubject;
+    property Subject : String read GetSubject write SetSubject;
     property BodyPlainText : String read sBodyPlainText write SetBodyPlainText;
 
-    constructor Create();
+    constructor CreateSendToSub(EmailSendTo, EmailSubject : String);
     destructor Destroy; Override;
   end;
 
 implementation
 
-{ TBasicEmail }
+{ TEmail }
 
-procedure TEmail.AddSendToEmailAddress(SendTo: String);
+procedure TEmail.AddSendToEmailAddress(const SendTo: String);
 begin
   slSendTo.Add( SendTo );
 end;
 
-constructor TEmail.Create;
+constructor TEmail.CreateSendToSub(EmailSendTo, EmailSubject : String);
 begin
-  inherited;
-  slSendTo := TStringList.Create;
+  sSubject        := '';
+  sBodyPlainText  := '';
+  slSendTo        := TStringList.Create;
+  if EmailSendTo <> '' then
+    AddSendToEmailAddress( EmailSendTo );
+  if EmailSubject <> '' then
+    SetSubject( EmailSubject );
 end;
 
 destructor TEmail.Destroy;
@@ -47,6 +53,11 @@ end;
 function TEmail.getSendTo: TStringList;
 begin
   result := slSendTo;
+end;
+
+function TEmail.GetSubject: String;
+begin
+  result := sSubject;
 end;
 
 procedure TEmail.SetBodyPlainText(const Value: String);

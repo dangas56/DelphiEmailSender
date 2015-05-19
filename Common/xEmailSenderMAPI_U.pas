@@ -14,7 +14,6 @@ type
     function SendEmail(email : IEmail): TEmailSendResult;
   end;
 
-
 implementation
 
 { TEmailSenderMAPI }
@@ -28,6 +27,7 @@ var MAPIModule          : HModule;
     smResult            : Integer;
 
     em_SendTo           : IEmailSendTo;
+    em_Subject          : IEmailSubject;
 
     i : Integer;
     RecipientsCount : integer;
@@ -43,20 +43,25 @@ begin
 
     if RecipientsCount > 0 then begin
       FillChar(MAPImessage, SizeOf(MAPImessage), 0);
+
       if Assigned(em_SendTo) then begin
         MAPImessage.nRecipCount := em_SendTo.SendTo.Count;
-
         GetMem(Recipients, MapiMessage.nRecipCount * sizeof(TMapiRecipDesc));
         PRecip := Recipients;
         for i := 0 to (em_SendTo.SendTo.Count - 1) do begin
           Recipients^.ulRecipClass := MAPI_TO;
-          Recipients^.lpszName := strNew(PansiChar(ansistring(em_SendTo.SendTo[i])));
+          Recipients^.lpszName := PansiChar(ansistring(em_SendTo.SendTo[i]));
           Recipients^.lpszAddress := nil;
           Recipients^.ulReserved := 0;
           Recipients^.ulEIDSize := 0;
           Recipients^.lpEntryID := nil;
         end;
       end;
+
+      if Supports(email, IEmailSubject, em_Subject) and (em_Subject.Subject <> '') then begin
+        MAPImessage.lpszSubject := PansiChar(ansistring(em_Subject.Subject));
+      end else
+        MAPImessage.lpszSubject := '';
 
       MAPImessage.lpRecips := PRecip;
       MAPImessage.nFileCount := 0;
@@ -80,6 +85,8 @@ begin
           FreeLibrary(MAPIModule);
         end;
       end;
+
+      freeMem( Recipients , MapiMessage.nRecipCount * sizeof(TMapiRecipDesc));
     end else
       raise Exception_EmailSender_NoRecipients.Create('');
   except
