@@ -13,6 +13,8 @@ type
     lblSendTo: TLabel;
     lblSubject: TLabel;
     eSubject: TEdit;
+    lblMessage: TLabel;
+    mBody: TMemo;
     procedure btnSendClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
@@ -33,7 +35,7 @@ procedure TfrmMain.btnSendClick(Sender: TObject);
 var EmailSender : IEmailSender;
 begin
   EmailSender := TEmailSenderMAPI.create;
-  case EmailSender.SendEmail( TEmail.CreateSendToSub( eSendTo.Text, eSubject.Text)  ) of
+  case EmailSender.SendEmail( TEmail.CreateBasic( eSendTo.Text, eSubject.Text, mBody.Text)  ) of
     esEmailUnknown   : ShowMessage('esEmailUnknown');
     esEmailSendError : ShowMessage('esEmailSendError');
     esEmailSent      : ShowMessage('esEmailSent');

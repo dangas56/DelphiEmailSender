@@ -4,23 +4,26 @@ interface
 uses system.classes, xEmail_I;
 
 type
-  TEmail = class (TInterfacedObject, IEmail, IEmailSendTo, IEmailSubject)
+  TEmail = class (TInterfacedObject, IEmail, IEmailSendTo, IEmailSubject, iEmailBodyPlainText)
   strict private
     slSendTo            : TStringList;
     sSubject            : String;
     sBodyPlainText      : String;
   private
-    procedure SetBodyPlainText(const Value: String);
     function GetSubject : String;
     procedure SetSubject(const Value: String);
     function getSendTo : TStringList;
+    procedure SetBodyPlainText(const Value: String);
+    function GetBodyPlainText : String;
+    procedure DefaultVariables;
   public
     procedure AddSendToEmailAddress(const SendTo : String);
     property SendTo : TStringList read slSendTo ;
     property Subject : String read GetSubject write SetSubject;
     property BodyPlainText : String read sBodyPlainText write SetBodyPlainText;
 
-    constructor CreateSendToSub(EmailSendTo, EmailSubject : String);
+    constructor Create;
+    constructor CreateBasic(EmailSendTo, EmailSubject, EmailBody : String);
     destructor Destroy; Override;
   end;
 
@@ -33,21 +36,42 @@ begin
   slSendTo.Add( SendTo );
 end;
 
-constructor TEmail.CreateSendToSub(EmailSendTo, EmailSubject : String);
+constructor TEmail.Create;
 begin
-  sSubject        := '';
-  sBodyPlainText  := '';
-  slSendTo        := TStringList.Create;
+  inherited;
+  DefaultVariables;
+end;
+
+constructor TEmail.CreateBasic(EmailSendTo, EmailSubject, EmailBody : String);
+begin
+  DefaultVariables;
   if EmailSendTo <> '' then
     AddSendToEmailAddress( EmailSendTo );
   if EmailSubject <> '' then
     SetSubject( EmailSubject );
+  if EmailBody <> '' then
+    SetBodyPlainText(EmailBody);
+end;
+
+procedure TEmail.DefaultVariables;
+begin
+  sSubject        := '';
+  sBodyPlainText  := '';
+  if not assigned(slSendTo) then
+    slSendTo := TStringList.Create
+  else
+    slSendTo.Clear;
 end;
 
 destructor TEmail.Destroy;
 begin
   slSendTo.Free;
   inherited;
+end;
+
+function TEmail.GetBodyPlainText: String;
+begin
+  result := sBodyPlainText;
 end;
 
 function TEmail.getSendTo: TStringList;

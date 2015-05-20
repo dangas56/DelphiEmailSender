@@ -28,6 +28,13 @@ object frmMain: TfrmMain
     Height = 13
     Caption = 'Subject'
   end
+  object lblMessage: TLabel
+    Left = 31
+    Top = 77
+    Width = 24
+    Height = 13
+    Caption = 'Body'
+  end
   object eSendTo: TEdit
     Left = 61
     Top = 21
@@ -37,7 +44,7 @@ object frmMain: TfrmMain
   end
   object btnSend: TButton
     Left = 61
-    Top = 136
+    Top = 256
     Width = 75
     Height = 25
     Caption = 'Send Email'
@@ -50,6 +57,15 @@ object frmMain: TfrmMain
     Width = 121
     Height = 21
     TabOrder = 2
-    Text = 'Test Email'
+    Text = 'Test Email subject'
+  end
+  object mBody: TMemo
+    Left = 61
+    Top = 77
+    Width = 185
+    Height = 89
+    Lines.Strings = (
+      'Test Email Body')
+    TabOrder = 3
   end
 end

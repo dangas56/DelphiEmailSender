@@ -22,6 +22,13 @@ type
     property Subject : String read GetSubject write SetSubject;
   End;
 
+  iEmailBodyPlainText = interface
+    ['{33A02A39-A0D7-4750-8E4C-7EC637D96195}']
+    procedure SetBodyPlainText(const value : String);
+    function GetBodyPlainText : String;
+    property BodyPlainText : String read GetBodyplainText write setBodyPlainText;
+  end;
+
 implementation
 
 end.

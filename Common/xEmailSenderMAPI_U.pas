@@ -28,6 +28,7 @@ var MAPIModule          : HModule;
 
     em_SendTo           : IEmailSendTo;
     em_Subject          : IEmailSubject;
+    em_BodyPlainText    : iEmailBodyPlainText;
 
     i : Integer;
     RecipientsCount : integer;
@@ -62,6 +63,12 @@ begin
         MAPImessage.lpszSubject := PansiChar(ansistring(em_Subject.Subject));
       end else
         MAPImessage.lpszSubject := '';
+
+      if Supports(email, iEmailBodyPlainText, em_BodyPlainText) and (em_BodyPlainText.BodyPlainText <> '')  then
+        MAPImessage.lpszNoteText := PansiChar(ansistring(em_BodyPlainText.BodyPlainText))
+      else
+        MAPImessage.lpszNoteText := '';
+
 
       MAPImessage.lpRecips := PRecip;
       MAPImessage.nFileCount := 0;
