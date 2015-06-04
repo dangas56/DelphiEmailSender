@@ -38,7 +38,7 @@ object frmMain: TfrmMain
   object eSendTo: TEdit
     Left = 61
     Top = 21
-    Width = 169
+    Width = 185
     Height = 21
     TabOrder = 0
   end
@@ -54,7 +54,7 @@ object frmMain: TfrmMain
   object eSubject: TEdit
     Left = 61
     Top = 50
-    Width = 121
+    Width = 185
     Height = 21
     TabOrder = 2
     Text = 'Test Email subject'

@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{DC4FCD2D-7BE5-4FEC-96DB-BD7228F3086A}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="DelphiEmailSender.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="DelphiEmailSenderUnitTests.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="DelphiEmailSender">
+        <MSBuild Projects="DelphiEmailSender.dproj"/>
+    </Target>
+    <Target Name="DelphiEmailSender:Clean">
+        <MSBuild Projects="DelphiEmailSender.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiEmailSender:Make">
+        <MSBuild Projects="DelphiEmailSender.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiEmailSenderUnitTests">
+        <MSBuild Projects="DelphiEmailSenderUnitTests.dproj"/>
+    </Target>
+    <Target Name="DelphiEmailSenderUnitTests:Clean">
+        <MSBuild Projects="DelphiEmailSenderUnitTests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiEmailSenderUnitTests:Make">
+        <MSBuild Projects="DelphiEmailSenderUnitTests.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="DelphiEmailSender;DelphiEmailSenderUnitTests"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="DelphiEmailSender:Clean;DelphiEmailSenderUnitTests:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="DelphiEmailSender:Make;DelphiEmailSenderUnitTests:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

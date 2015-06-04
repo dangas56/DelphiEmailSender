@@ -57,10 +57,14 @@ procedure TEmail.DefaultVariables;
 begin
   sSubject        := '';
   sBodyPlainText  := '';
-  if not assigned(slSendTo) then
-    slSendTo := TStringList.Create
-  else
+  if not assigned(slSendTo) then begin
+    slSendTo := TStringList.Create;
+    slSendTo.Duplicates := dupIgnore;
+    slSendTo.CaseSensitive := False;
+    slSendTo.Sorted := True;
+  end else begin
     slSendTo.Clear;
+  end;
 end;
 
 destructor TEmail.Destroy;
